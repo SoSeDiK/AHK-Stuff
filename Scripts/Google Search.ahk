@@ -21,10 +21,18 @@ GoogleIt(SearchType) {
 
 	; Copy highlighted text to the clipboard
 	Send "^c"
-	If not ClipWait(.5)
-		Query := InputBox("Enter the text to search:", "Google Search", "W200 H100").Value
-	Else
+	If not ClipWait(.5) {
+		Box := InputBox("Enter the text to search:", "Google Search", "W200 H100")
+		If (Box.Result = "Cancel")
+			Return
+		Query := Box.Value
+	} Else {
 		Query := A_Clipboard
+	}
+	
+	Query := Trim(Query)
+	If (Query = "")
+		Return
 
 	; Search
 	If (SearchType = 1)
